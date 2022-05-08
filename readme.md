@@ -9,6 +9,7 @@
 ## 使用
 
 1. 克隆
+地址：https://gitee.com/ww24kobe/vite-vue2-vueRouter-vuex-sass
 ```
 git clone https://gitee.com/ww24kobe/vite-vue2-vueRouter-vuex-sass.git
 ```
