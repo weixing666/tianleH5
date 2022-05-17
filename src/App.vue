@@ -1,27 +1,47 @@
 <template>
-    <div class="app">
-        <h1>hello vue2+vite</h1>
-        <router-link to="/">Home</router-link> |
-        <router-link to="/about">About</router-link> |
-        <router-link to="/test">test</router-link>
-        <router-view />
-
-        
-    </div>
+  <div class="app">
+    <van-nav-bar
+      v-show="ismainpage"
+      :title="title"
+      left-text="返回"
+      right-text="按钮"
+      left-arrow
+      @click-left="$router.back()"
+    />
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
-    export default {
-        
-    }
+export default {
+  data() {
+    return {
+      ismainpage: true,
+      title: "天乐",
+    };
+  },
+  watch: {
+    "$route": {
+      handler: function (newroute) {
+        let { ismainpage, title } = newroute.meta;
+        this.title = title;
+        console.log(title);
+        if (ismainpage) {
+          this.ismainpage = false;
+        } else {
+          this.ismainpage = true;
+        }
+      },
+      immediate: true,
+    },
+  },
+};
 </script>
 <style lang="scss">
-    .App {
-        ul {
-            li {
-                list-style: none;
-            }
-        }
-    }
+.app {
+  min-width: 320px;
+  max-width: 750px;
+  margin: 0 auto;
+}
 </style>
 

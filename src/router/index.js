@@ -1,30 +1,64 @@
-import Vue from 'vue'
+import Vue from "vue"
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue' // 引入 Home页面组件
-import Test from '../views/Test.vue' // 引入 Test页面组件
-
-// 注册路由插件
 Vue.use(VueRouter)
-
-const routes = [{
-        path: '/',
-        name: 'Home',
-        component: Home
-    },
-    {
-        path: '/about',
-        name: 'About',
-        component: () => import('../views/About.vue')
-    },
-    {
-        path: '/test',
-        name: 'Test',
-        component: Test
-    },
-]
-
+import Home from '../views/Home.vue'
+import Shopping from '../views/Shopping.vue'
+import User from '../views/User.vue'
+import Index from '../views/Index.vue'
+import Goodslist from '../views/Goodslist.vue'
+import Order from '../views/Order.vue'
 const router = new VueRouter({
-    routes
+    routes: [
+        {
+            path: "/",
+            redirect:"/home/index"
+        },
+        {
+            path: "/home",
+            component: Index,
+            children: [
+                {
+                    path: "index",
+                    component: Home,
+                    meta: {
+                        name: "Home",
+                        ismainpage:true,
+                    }
+                },
+                {
+                    path: "shopping",
+                    component: Shopping,
+                    meta: {
+                        name: "Shopping",
+                        ismainpage: true,
+                    }
+                },
+                {
+                    path: "user",
+                    component: User,
+                    meta: {
+                        name: "User",
+                        ismainpage: true,
+                    }
+                },
+            ]
+        },
+        {
+            path: "/goodslist",
+            component: Goodslist,
+            meta: {
+                title:"商品列表"
+            }
+        },
+        {
+            path: "/order",
+            component: Order,
+            meta: {
+                title: "我的订单"
+            }
+        },
+        
+    ]
 })
 
 export default router
