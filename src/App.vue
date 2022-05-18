@@ -21,11 +21,10 @@ export default {
     };
   },
   watch: {
-    "$route": {
+    $route: {
       handler: function (newroute) {
         let { ismainpage, title } = newroute.meta;
         this.title = title;
-        console.log(title);
         if (ismainpage) {
           this.ismainpage = false;
         } else {
@@ -38,10 +37,19 @@ export default {
 };
 </script>
 <style lang="scss">
+@import url("../src/assets/css/common.scss");
+@import url("../src/assets/css/normalize.css");
 .app {
   min-width: 320px;
   max-width: 750px;
   margin: 0 auto;
+}
+* {
+  box-sizing: border-box;
+}
+// 滚动丝滑
+html {
+  scroll-behavior: smooth;
 }
 </style>
 

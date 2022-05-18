@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
-import './vantui/vantui'
-import router from "./router/index"
+import './vantui'
+import router from "./router"
 Vue.config.productionTip = false;
 new Vue({
   router,

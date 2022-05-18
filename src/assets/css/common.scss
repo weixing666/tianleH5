@@ -1,0 +1,17 @@
+.flex_c_c {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ellipsis_line_1 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ellipsis_line_2 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+}
