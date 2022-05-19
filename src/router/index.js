@@ -1,5 +1,7 @@
 import Vue from "vue"
 import VueRouter from 'vue-router'
+import 'NProgress/NProgress.css'
+import NProgress from 'NProgress'
 Vue.use(VueRouter)
 // import Home from '../views/Home.vue'
 // import Shopping from '../views/Shopping.vue'
@@ -15,7 +17,6 @@ const router = new VueRouter({
         },
         {
             path: "/home",
-            // component: Index,
             component: () => import('../views/Index.vue'),
             children: [
                 {
@@ -57,7 +58,6 @@ const router = new VueRouter({
         {
             path: "/goodslist",
             component: () => import('../views/Goodslist.vue'),
-            // component: Goodslist,
             meta: {
                 title: "商品列表"
             }
@@ -65,13 +65,44 @@ const router = new VueRouter({
         {
             path: "/order",
             component: () => import('../views/Order.vue'),
-            // component: Order,
             meta: {
                 title: "我的订单"
             }
         },
-
+        {
+            path: "/login",
+            component: () => import('../views/Login.vue'),
+            meta: {
+                title: "登陆"
+            }
+        },
+        {
+            path: "/searchresult/:value",
+            component: () => import('../views/SearchResult.vue'),
+            meta: {
+                ismainpage: true,
+            },
+            props: true
+        },
+        {
+            path: "/goodsdetail/:value",
+            component: () => import('../views/Goodsdetail.vue'),
+            meta: {
+                title: "商品详情"
+            },
+            props: true
+        },
     ]
 })
+NProgress.configure({
+    showSpinner: false
+})
 
+router.beforeEach((to, from, next) => {
+    NProgress.start()
+    next();
+})
+router.afterEach((to, from) => {
+    NProgress.done()
+})
 export default router

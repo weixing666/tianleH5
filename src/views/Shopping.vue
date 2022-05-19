@@ -11,7 +11,9 @@
     <div class="buycar">
       <van-image width="100" height="100" src="../src/assets/image/car.png" />
       <div class="tip">您的购物车空空如也</div>
-      <div class="ending"><van-button type="danger">去首页</van-button></div>
+      <div class="ending">
+        <van-button type="danger" to="/home/index">去首页</van-button>
+      </div>
     </div>
     <!-- 底部 -->
     <van-submit-bar :price="3050" button-text="提交订单" :disabled="isdisabled">

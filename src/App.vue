@@ -1,13 +1,15 @@
 <template>
   <div class="app">
+    <!-- 返回 -->
     <van-nav-bar
       v-show="ismainpage"
       :title="title"
       left-text="返回"
-      right-text="按钮"
       left-arrow
       @click-left="$router.back()"
     />
+    <!-- 搜索结果 -->
+    
     <router-view></router-view>
   </div>
 </template>
