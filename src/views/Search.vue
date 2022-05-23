@@ -1,4 +1,5 @@
 <template>
+ <!-- @search="$router.push(`/searchresult/${searchContent}`)" -->
   <div class="search">
     <van-popup
       v-model="show"
@@ -10,7 +11,7 @@
           v-model="searchContent"
           show-action
           placeholder="请输入搜索关键词"
-          @search="$router.push(`/searchresult/${searchContent}`)"
+          @search="foo(searchContent)"
           @cancel="onCancel"
         />
       </form>
@@ -47,6 +48,7 @@
 </template>
 
 <script>
+import { mapState, mapGetters, mapActions, mapMutations } from "Vuex";
 export default {
   data() {
     return {
@@ -60,10 +62,16 @@ export default {
     this._search;
   },
   methods: {
+    ...mapMutations(["upsearchvalue"]),
     // 取消搜索
     onCancel() {
       this.$router.back();
     },
+    // 
+    foo(a){
+      this.upsearchvalue(a),
+      this.$router.push(`/searchresult/${this.searchContent}`)
+    }
   },
 };
 </script>

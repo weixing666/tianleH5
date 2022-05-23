@@ -4,3 +4,4 @@ import instance from "./instance.js"
 export function fetchgoodslist(page = 1, limit = 10) {
     return instance.get(`api/getgoods?pageindex=${page}&pagesize=${limit}`)
 }
+

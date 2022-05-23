@@ -1,55 +1,128 @@
 <template>
   <div class="usercontent">
-    <!-- 头部 -->
-    <div class="van-nav-bar">
+    <div class="nav">
+      <span></span>
+      <span class="title">我的乐购</span>
+      <span class="icon"><van-icon name="setting-o" /></span>
+    </div>
+    <div class="avatar">
       <div class="userInfo">
-        <div><div>头像</div></div>
-        <div>更换头像</div>
-        <div>用户名</div>
+        <div class="useravatar">
+          <van-image round width="68px" height="68px" :src="avatar" />
+          <van-button @click="upload" size="mini">更换头像</van-button>
+          <input
+            v-show="false"
+            type="file"
+            ref="avatar"
+            @change="uploadAvatar"
+          />
+        </div>
+        <div class="hillo">{{ userInfo.username }} , 你好 !</div>
       </div>
     </div>
-    <!-- 中间 -->
-    <div class="mybuy">
-      <div class="mybuyinfo">
-        <div class=""></div>
-      </div>
-    </div>
+
+    <!-- 绝对定位 -->
+    <van-cell-group inset>
+      <van-cell title="我的订单" value="" is-link to="/orderlist" />
+      <van-cell title="收货地址" value="" is-link to="/address" />
+      <van-cell title="设置" value="" is-link />
+      <van-cell title="关于乐购" value="v1.3.5" is-link />
+    </van-cell-group>
   </div>
 </template>
 
 <script>
-export default {};
+import { fetchuploadAvatar } from "../api/user";
+import { mapState, mapGetters, mapActions, mapMutations } from "Vuex";
+export default {
+  data() {
+    return {
+      img: "",
+    };
+  },
+  methods: {
+    ...mapMutations(["updatedav"]),
+    upload() {
+      // 触发自点击事件
+      this.$refs.avatar.click();
+    },
+    // 上传头像
+    async uploadAvatar() {
+      let file = this.$refs.avatar.files[0];
+      let user_id = this.userInfo.id;
+      if (file) {
+        let formData = new FormData();
+        formData.append("user_id", user_id);
+        formData.append("file", file);
+        let { message, status, src } = await fetchuploadAvatar(formData);
+        // 成功失败都提示
+        this.$toast(message)
+        if(status === 0){
+          // 把用户更新的信息存贮到vuex
+            this.updatedav(src)
+        }
+      }
+    },
+  },
+  computed: {
+    ...mapState(["userInfo"]),
+    avatar() {
+            return 'http://api.w0824.com/' + this.userInfo.avatar;
+        },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
 .usercontent {
-  .van-nav-bar {
+  position: relative;
+  background-color: #e1e1e1;
+  height: 100vh;
+  .nav {
+    padding: 25px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 30px;
+    font-weight: 700;
+    font-size: 18px;
+    color: #ffffff;
+    background: #de2828;
+    .icon {
+      font-size: 20px;
+    }
+  }
+  .avatar {
     padding: 10px;
     height: 180px;
-    background: rgb(55, 138, 110);
+    background: #e01919;
     .userInfo {
       position: relative;
       display: flex;
-      justify-content: space-around;
-      align-items: center;
-      padding: 10px 16px;
-      color: #eee;
-      margin: 0 10px;
+      color: #ffffff;
       font-size: 14px;
+      padding: 0 20px;
+      .van-button {
+        margin-top: 20px;
+      }
+      .useravatar {
+        display: flex;
+        flex-direction: column;
+      }
+      .hillo {
+        margin: 0 25px;
+        font-family: 700;
+        font-size: 25px;
+        color: #ffffff;
+        padding-top: 20px;
+      }
     }
   }
-  .mybuy {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    .mybuyinfo {
-      width: 90vw;
-      padding: 10px;
-      border-top-left-radius: 20px;
-      border-top-right-radius: 20px;
-      background: rgb(235, 85, 85);
-      margin-top: -40px;
-    }
+  .van-cell-group {
+    position: absolute;
+    top: 195px;
+    width: 90%;
+    background-color: #fff;
   }
 }
 </style>

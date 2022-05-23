@@ -1,10 +1,12 @@
 <template>
   <div class="goodsdetail">
-    <van-swipe :autoplay="3000" indicator-color="white">
-      <van-swipe-item v-for="image in images" :key="image.id">
-        <img :src="image.src" />
-      </van-swipe-item>
-    </van-swipe>
+    <div @click="Previewimg">
+      <van-swipe :autoplay="3000" indicator-color="white">
+        <van-swipe-item v-for="image in images" :key="image.id">
+          <img :src="image.src" />
+        </van-swipe-item>
+      </van-swipe>
+    </div>
     <div class="card">
       <div class="price">
         <span class="discount">¥ {{ info.sell_price }}</span>
@@ -22,7 +24,7 @@
       <van-goods-action-icon
         icon="cart-o"
         text="购物车"
-        badge="5"
+        :badge="carnum"
         to="/home/shopping"
       />
       <van-goods-action-icon icon="shop-o" text="进入店铺" to="/home/index" />
@@ -31,77 +33,55 @@
         text="加入购物车"
         @click="onClickButton"
       />
-      <van-goods-action-button type="danger" text="立即购买" />
+      <van-goods-action-button
+        type="danger"
+        text="立即购买"
+        @click="onClickButton(false)"
+      />
     </van-goods-action>
     <!-- 加入购物车弹窗 -->
-    <van-sku v-model="show" :sku="sku" :goods="goods" />
+    <van-sku
+      v-model="show"
+      :sku="sku"
+      :goods="goods"
+      :goods-id="info.id"
+      :show-add-cart-btn="showAddCartBtn"
+      @add-cart="addCart"
+    >
+      <template #sku-messages>
+        <van-divider>详情</van-divider>
+        <p class="detal">商品货号:{{ info.goods_no }}</p>
+        <p class="detal">库存:{{ info.stock_quantity }}件</p>
+        <p class="detal">上架时间:{{ info.add_time | dataFormat }}</p>
+      </template>
+    </van-sku>
   </div>
 </template>
 
 <script>
+import { mapState, mapGetters, mapActions, mapMutations } from "Vuex";
 import { fetchgoodsdetail, fetchgoodsinfo } from "../api/goodsdetail";
+import { ImagePreview } from "vant";
 export default {
   data() {
     return {
       images: [],
+      previewimg: [],
       info: "",
       // sku数据
       show: false,
+      showAddCartBtn: true, // 是否显示sku中加入购物车的按钮
       sku: {
-        // 所有sku规格类目与其值的从属关系，比如商品有颜色和尺码两大类规格，颜色下面又有红色和蓝色两个规格值。
-        // 可以理解为一个商品可以有多个规格类目，一个规格类目下可以有多个规格值。
-        tree: [
-          {
-            k: "颜色", // skuKeyName：规格类目名称
-            k_s: "s1", // skuKeyStr：sku 组合列表（下方 list）中当前类目对应的 key 值，value 值会是从属于当前类目的一个规格值 id
-            v: [
-              {
-                id: "1", // skuValueId：规格值 id
-                name: "红色", // skuValueName：规格值名称
-                imgUrl: "https://img01.yzcdn.cn/1.jpg", // 规格类目图片，只有第一个规格类目可以定义图片
-                previewImgUrl: "https://img01.yzcdn.cn/1p.jpg", // 用于预览显示的规格类目图片
-              },
-              {
-                id: "1",
-                name: "蓝色",
-                imgUrl: "https://img01.yzcdn.cn/2.jpg",
-                previewImgUrl: "https://img01.yzcdn.cn/2p.jpg",
-              },
-            ],
-            largeImageMode: true, //  是否展示大图模式
-          },
-        ],
-        // 所有 sku 的组合列表，比如红色、M 码为一个 sku 组合，红色、S 码为另一个组合
-        list: [
-          {
-            id: 2259, // skuId
-            s1: "1", // 规格类目 k_s 为 s1 的对应规格值 id
-            s2: "1", // 规格类目 k_s 为 s2 的对应规格值 id
-            price: 100, // 价格（单位分）
-            stock_num: 110, // 当前 sku 组合对应的库存
-          },
-        ],
-        price: "1.00", // 默认价格（单位元）
+        tree: [],
+        price: 2900, // 默认价格（单位元）
         stock_num: 227, // 商品总库存
         collection_id: 2261, // 无规格商品 skuId 取 collection_id，否则取所选 sku 组合对应的 id
-        none_sku: false, // 是否无规格商品
-        messages: [
-          {
-            // 商品留言
-            datetime: "0", // 留言类型为 time 时，是否含日期。'1' 表示包含
-            multiple: "0", // 留言类型为 text 时，是否多行文本。'1' 表示多行
-            name: "留言", // 留言名称
-            type: "text", // 留言类型，可选: id_no（身份证）, text, tel, date, time, email
-            required: "1", // 是否必填 '1' 表示必填
-            placeholder: "", // 可选值，占位文本
-            extraDesc: "", // 可选值，附加描述文案
-          },
-        ],
+        none_sku: true, // 是否无规格商品
         hide_stock: false, // 是否隐藏剩余库存
       },
       goods: {
         // 默认商品 sku 缩略图
-        picture: "https://img01.yzcdn.cn/1.jpg",
+        picture: "",
       },
     };
   },
@@ -110,21 +90,54 @@ export default {
     this._fetchgoodsdetail();
     this._fetchgoodsinfo();
   },
+  computed: {
+    ...mapGetters(["carnum"]),
+  },
   methods: {
+    ...mapMutations(["addcardata"]),
     async _fetchgoodsdetail() {
       let { message } = await fetchgoodsdetail(this.value);
       this.images = message;
+      this.goods.picture = message.length && message[0].src;
+      this.previewimg = message.map((item) => item.src);
     },
     async _fetchgoodsinfo() {
       let { message } = await fetchgoodsinfo(this.value);
+      let reg = /\width=['"]\w+['"]\s/gi;
+      message.content = message.content.replace(reg, "");
       this.info = message;
+      this.sku.price = message.sell_price;
+      this.sku.stock_num = message.stock_quantity;
     },
-    onClickIcon() {
-      // Toast("点击图标");
+    Previewimg() {
+      ImagePreview(this.previewimg);
     },
-    onClickButton() {
-      // 触发弹窗
+    // 触发弹窗
+    onClickButton(a) {
       this.show = true;
+      if (a) {
+        this.showAddCartBtn = true;
+      } else {
+        this.showAddCartBtn = false;
+      }
+    },
+    addCart(skuData) {
+      let { goodsId, selectedNum } = skuData;
+      // 数据结构,id,数量,价格
+      let cardata = {
+        id: goodsId,
+        num: selectedNum,
+        pirce: this.info.sell_price,
+        check:false
+      };
+      // 操作vuex加入数据库
+      this.addcardata(cardata);
+      // 关闭sku弹窗
+      this.show = false;
+      // 提示加入成功
+      this.$dialog.alert({
+        message: "加入购物车成功",
+      });
     },
   },
 };
@@ -178,6 +191,10 @@ export default {
   .contentinfo {
     background-color: white;
     .content {
+      // overflow: hidden;
+      ::v-deep tbody {
+        width: 750px;
+      }
       color: #666;
       ::v-deep img {
         width: 100%;
@@ -187,6 +204,10 @@ export default {
     .van-divider {
       padding-top: 30px;
     }
+  }
+
+  .detal {
+    padding: 2px 20px;
   }
 }
 </style>

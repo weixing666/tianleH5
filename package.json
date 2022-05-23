@@ -12,7 +12,10 @@
     "vite": "^2.9.7"
   },
   "dependencies": {
+    "@vant/area-data": "^1.2.4",
     "axios": "^0.27.2",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.3",
     "nprogress": "^0.2.0",
     "sass": "^1.51.0",
     "vant": "^2.12.47",
@@ -20,6 +23,7 @@
     "vue": "^2.6.14",
     "vue-router": "^3.5.4",
     "vue-template-compiler": "^2.6.14",
-    "vuex": "^3.5.1"
+    "vuex": "^3.5.1",
+    "vuex-persistedstate": "^4.1.0"
   }
 }

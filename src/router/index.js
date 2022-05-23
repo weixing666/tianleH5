@@ -2,6 +2,7 @@ import Vue from "vue"
 import VueRouter from 'vue-router'
 import 'NProgress/NProgress.css'
 import NProgress from 'NProgress'
+import store from "../store/index.js"
 Vue.use(VueRouter)
 // import Home from '../views/Home.vue'
 // import Shopping from '../views/Shopping.vue'
@@ -47,10 +48,10 @@ const router = new VueRouter({
                 {
                     path: "user",
                     component: () => import('../views/User.vue'),
-                    // component: User,
                     meta: {
                         name: "User",
                         ismainpage: true,
+                        isneedtologin: true
                     }
                 },
             ]
@@ -92,16 +93,67 @@ const router = new VueRouter({
             },
             props: true
         },
+        {
+            path: "/address",
+            component: () => import('../views/Address.vue'),
+            meta: {
+                title: "收货地址"
+            },
+            props: true
+        },
+        {
+            path: "/addAddress",
+            component: () => import('../views/addAddress.vue'),
+            meta: {
+                title: "添加收货地址"
+            },
+            props: true
+        },
+        {
+            path: "/editaddress/:value",
+            component: () => import('../views/Editaddress.vue'),
+            meta: {
+                title: "编辑地址"
+            },
+            props: true
+        },
+        {
+            path: "/register",
+            component: () => import('../views/Register.vue'),
+            meta: {
+                title: "用户注册"
+            },
+            props: true
+        },
+        {
+            path: "/orderlist",
+            component: () => import('../views/Orderlist.vue'),
+            meta: {
+                title: "我的订单"
+            },
+            props: true
+        },
     ]
 })
 NProgress.configure({
     showSpinner: false
 })
 
+// 前守卫(权限校验)
 router.beforeEach((to, from, next) => {
     NProgress.start()
+    let jurisdiction = to.meta.isneedtologin
+    if (jurisdiction) {
+        if (store.state.token) {
+            next();
+        } else {
+            // 为了用户在登陆之后重定向回原来的页面,fullPath 为原来的全路由信息
+            router.push("/login?redirect?" + to.fullPath)
+        }
+    }
     next();
 })
+// 后守卫
 router.afterEach((to, from) => {
     NProgress.done()
 })

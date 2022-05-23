@@ -9,10 +9,9 @@
         >
           <template #left>
             <van-image
-              width="2rem"
-              height="2rem"
-              round
-              src="../src/assets/image/logo.jpg"
+              width="2.5rem"
+              height="2.5rem"
+              src="../src/assets/image/logo.png"
             />
           </template>
         </van-search>
