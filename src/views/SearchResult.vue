@@ -1,13 +1,7 @@
 <template>
   <div class="searchresult">
     <form action="/">
-      <van-search
-        v-model="sevalue.value"
-        show-action
-        placeholder="请输入搜索关键词"
-        @search="onSearch"
-        @cancel="onCancel"
-      />
+      <van-search v-model="sevalue.value" show-action placeholder="请输入搜索关键词" @search="onSearch" @cancel="onCancel" />
     </form>
     <van-dropdown-menu>
       <van-dropdown-item v-model="value1" :options="option1" @change="Conditions" />
@@ -16,11 +10,7 @@
     <van-empty description="没有该商品" v-show="searchResult.length === 0 " />
     <!-- 有结果状态 -->
     <div class="goodslist" v-show="searchResult.length">
-      <Good
-        v-for="item in searchResult"
-        :data="item"
-        @goclick="Goodsdetail(item)"
-      ></Good>
+      <Good v-for="item in searchResult" :data="item" @goclick="Goodsdetail(item)"></Good>
     </div>
   </div>
 </template>
@@ -85,7 +75,7 @@ export default {
       this.$router.push(`/goodsdetail/${data.id}`);
     },
     // 条件搜索
-    Conditions(value){
+    Conditions(value) {
       console.log(value); //0,1,2
       // sort 排序的字段，共三种：buy（销量-默认）、likes(好评)、sell_price(价格)
       // this.upsearchvalue(this.sevalue.value);

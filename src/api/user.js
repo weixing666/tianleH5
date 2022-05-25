@@ -49,3 +49,19 @@ export function fetchuploadAvatar(formData) {
 export function fetchorder(formData) {
     return instance.post(`api/commitorder`, formData)
 }
+
+// 获取订单信息
+export function fetchgetorderinfo(order_id) {
+    return instance.post(`api/getorder/${order_id}`)
+}
+
+// 获取用户订单
+export function fetchgetorder(user_id) {
+    return instance.post(`api/userorder/${user_id}`)
+}
+
+// 模拟提交订单信息
+export function fetchPayOrder(order_id) {
+    return axios.post('api/payorder/' + order_id)
+}
+

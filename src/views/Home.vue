@@ -3,16 +3,9 @@
     <div>
       <!-- 点击进入搜索 -->
       <van-sticky>
-        <van-search
-          placeholder="男士秋裤"
-          @focus="$router.push('/home/index/search')"
-        >
+        <van-search placeholder="男士秋裤" @focus="$router.push('/home/index/search')">
           <template #left>
-            <van-image
-              width="2.5rem"
-              height="2.5rem"
-              src="../src/assets/image/logo.png"
-            />
+            <van-image width="2.5rem" height="2.5rem" src="../src/assets/image/logo.png" />
           </template>
         </van-search>
       </van-sticky>
@@ -35,12 +28,7 @@
     <van-divider>推荐更多</van-divider>
     <!-- 推荐更多 -->
     <div class="goodslist">
-      <Good
-        v-for="item in goodslist"
-        :key="item.id"
-        :data="item"
-        @goclick="Goodsdetail"
-      />
+      <Good v-for="item in goodslist" :key="item.id" :data="item" @goclick="Goodsdetail" />
     </div>
     <BackTop :scrollTop="500"></BackTop>
   </div>

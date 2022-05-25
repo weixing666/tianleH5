@@ -3,19 +3,16 @@
     <div class="nav">
       <span></span>
       <span class="title">我的乐购</span>
-      <span class="icon"><van-icon name="setting-o" /></span>
+      <span class="icon">
+        <van-icon name="setting-o" />
+      </span>
     </div>
     <div class="avatar">
       <div class="userInfo">
         <div class="useravatar">
           <van-image round width="68px" height="68px" :src="avatar" />
           <van-button @click="upload" size="mini">更换头像</van-button>
-          <input
-            v-show="false"
-            type="file"
-            ref="avatar"
-            @change="uploadAvatar"
-          />
+          <input v-show="false" type="file" ref="avatar" @change="uploadAvatar" />
         </div>
         <div class="hillo">{{ userInfo.username }} , 你好 !</div>
       </div>

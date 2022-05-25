@@ -142,6 +142,9 @@ export default new Vuex.Store({
         },
         // 监测是否全选
         isAllchecked(state, isAll) {
+            if (state.cardata.length === 0) {
+                return false
+            }
             let mapckeck = {}
             mapckeck.check = state.cardata.every(item => item.check === true)
             return mapckeck

@@ -1,19 +1,9 @@
 <template>
   <div class="listceoten">
     <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
-      <van-list
-        v-model="loading"
-        :finished="finished"
-        finished-text="没有更多了"
-        @load="onLoad"
-      >
+      <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
         <div class="goodslist">
-          <Good
-            v-for="item in list"
-            :key="item.id"
-            :data="item"
-            @goclick="Goodsdetail"
-          >
+          <Good v-for="item in list" :key="item.id" :data="item" @goclick="Goodsdetail">
             <template #ending>
               <div class="_footer">
                 <span class="_price">热卖中</span>

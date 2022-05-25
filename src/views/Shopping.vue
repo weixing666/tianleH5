@@ -1,16 +1,8 @@
 <template>
-  <div
-    class="shoppingcontent"
-    :class="{ pass: goods.length >= 5 ? true : false }"
-  >
+  <div class="shoppingcontent" :class="{ pass: goods.length >= 5 ? true : false }">
     <!-- 顶部 -->
     <van-sticky>
-      <van-nav-bar
-        title="我的购物车"
-        left-text="返回"
-        left-arrow
-        @click-left="$router.back()"
-      >
+      <van-nav-bar title="我的购物车" left-text="返回" left-arrow @click-left="$router.back()">
         <template #right>
           <div class="adress" @click="$router.push('/address')">
             <van-icon name="shop-o" />添加地址
@@ -46,68 +38,37 @@
     </div>
     <!-- 商品展示 -->
     <van-swipe-cell v-show="carnum > 0 ? true : false" v-for="item in goods">
-      <van-card
-        :price="item.sell_price"
-        :title="item.title"
-        class="goods-card"
-        :thumb="item.thumb_path"
-      >
+      <van-card :price="item.sell_price" :title="item.title" class="goods-card" :thumb="item.thumb_path">
         <template #price-top>
           <div>
-            <van-checkbox
-              v-model="ischecked[item.id]"
-              checked-color="#ee0a24"
-              @click="
+            <van-checkbox v-model="ischecked[item.id]" checked-color="#ee0a24" @click="
                 ischeek({
                   id: item.id,
                   ischeek: ischecked[item.id],
                 })
-              "
-            ></van-checkbox>
+              "></van-checkbox>
           </div>
         </template>
         <template #num>
-          <van-stepper
-            v-model="inventory[item.id]"
-            theme="round"
-            button-size="22"
-            disable-input
-            @change="
+          <van-stepper v-model="inventory[item.id]" theme="round" button-size="22" disable-input @change="
               changeNumber({
                 id: item.id,
                 num: inventory[item.id],
               })
-            "
-          />
+            " />
         </template>
       </van-card>
       <template #right>
-        <van-button
-          square
-          text="删除"
-          type="danger"
-          class="delete-button"
-          @click="deletegood(item.id)"
-        />
+        <van-button square text="删除" type="danger" class="delete-button" @click="deletegood(item.id)" />
       </template>
     </van-swipe-cell>
 
     <!-- 底部 -->
-    <van-submit-bar
-      :price="totalpic * 100"
-      button-text="提交订单"
-      :disabled="buynum > 0 ? false : true"
-      @submit="submitOrder"
-    >
+    <van-submit-bar :price="totalpic * 100" button-text="提交订单" :disabled="buynum > 0 ? false : true" @submit="submitOrder">
       <template #tip> 仅支持微信支付 </template>
       <template #default>
         共选中 {{ buynum }} 件 &nbsp &nbsp
-        <van-checkbox
-          v-model="isAllchecked.check"
-          checked-color="#ee0a24"
-          @click="clkAllcheck(isAllchecked.check)"
-          >全选</van-checkbox
-        >
+        <van-checkbox v-model="isAllchecked.check" checked-color="#ee0a24" @click="clkAllcheck(isAllchecked.check)">全选</van-checkbox>
       </template>
     </van-submit-bar>
   </div>
@@ -149,7 +110,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(["updatenum", "updatecheek", "delete", "Allischeek","clearCartData"]),
+    ...mapMutations(["updatenum", "updatecheek", "delete", "Allischeek", "clearCartData"]),
     // 获取购物车中的商品
     async _fetchgetcardata() {
       if (this.carnum !== 0) {
@@ -190,7 +151,7 @@ export default {
           this.delete(id);
           location.reload();
         })
-        .catch(() => {});
+        .catch(() => { });
     },
     // 判断是否完善收货地址
     async _fetchgetAddress() {
@@ -221,6 +182,7 @@ export default {
         number: this.buynum,
         goods_ids: this.getCarSelectedGoodsIds,
       };
+      console.log(data);
       // 2.提交订单loading提示
       this.$toast.loading({
         duration: 0, // 持续展示 toast
@@ -241,16 +203,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters([
-      "carnum",
-      "getcarid",
-      "inventory",
-      "ischecked",
-      "buynum",
-      "totalpic",
-      "isAllchecked",
-      "getCarSelectedGoodsIds",
-    ]),
+    ...mapGetters(["carnum", "getcarid", "inventory", "ischecked", "buynum", "totalpic", "isAllchecked", "getCarSelectedGoodsIds",]),
     ...mapState(["token", "userInfo"]),
   },
 };

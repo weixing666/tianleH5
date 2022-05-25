@@ -128,6 +128,14 @@ const router = new VueRouter({
             },
             props: true
         },
+        {
+            path: "/orderdetails/:order_id",
+            component: () => import('../views/OrderDetails.vue'),
+            meta: {
+                title: "订单详情"
+            },
+            props: true
+        },
     ]
 })
 NProgress.configure({

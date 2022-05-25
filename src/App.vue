@@ -2,17 +2,10 @@
   <div class="app">
     <!-- 返回 -->
     <van-sticky>
-      <van-nav-bar
-        v-show="ismainpage"
-        :title="title"
-        left-text="返回"
-        left-arrow
-        @click-left="$router.back()"
-      />
+      <van-nav-bar v-show="ismainpage" :title="title" left-arrow @click-left="$router.back()" />
     </van-sticky>
 
     <!-- 搜索结果 -->
-
     <router-view></router-view>
   </div>
 </template>

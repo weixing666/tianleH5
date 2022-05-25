@@ -1,19 +1,9 @@
 <template>
   <!-- @search="$router.push(`/searchresult/${searchContent}`)" -->
   <div class="search">
-    <van-popup
-      v-model="show"
-      position="top"
-      :style="{ height: '30%' }"
-      @click-overlay="$router.back()"
-      ><form action="/">
-        <van-search
-          v-model="searchContent"
-          show-action
-          placeholder="请输入搜索关键词"
-          @search="foo(searchContent)"
-          @cancel="onCancel"
-        />
+    <van-popup v-model="show" position="top" :style="{ height: '30%' }" @click-overlay="$router.back()">
+      <form action="/">
+        <van-search v-model="searchContent" show-action placeholder="请输入搜索关键词" @search="foo(searchContent)" @cancel="onCancel" />
       </form>
       <!-- 搜索历史 -->
       <div class="searchWrap">
@@ -23,9 +13,7 @@
             <van-icon name="delete-o" />
           </div>
           <div class="footer">
-            <span>小新16</span><span>小新16</span><span>小新16</span
-            ><span>小新16</span><span>小新16</span><span>小新16</span
-            ><span>小新16</span><span>小新16</span>
+            <span>小新16</span><span>小新16</span><span>小新16</span><span>小新16</span><span>小新16</span><span>小新16</span><span>小新16</span><span>小新16</span>
           </div>
         </div>
         <!-- 分割线 -->
@@ -74,7 +62,7 @@ export default {
         this.$toast.fail("请输入搜索商品");
       } else {
         this.upsearchvalue(a),
-        this.$router.push(`/searchresult/${this.searchContent}`);
+          this.$router.push(`/searchresult/${this.searchContent}`);
       }
     },
   },
