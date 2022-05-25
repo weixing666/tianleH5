@@ -16,7 +16,7 @@ VueRouter.prototype.push = function push(location) {
 Vue.prototype.$bus = new Vue();
 
 Vue.config.productionTip = false;
-let vm = new Vue({
+new Vue({
   router,
   store,
   render: h => h(App)

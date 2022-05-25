@@ -19,11 +19,7 @@
       </van-nav-bar>
     </van-sticky>
     <!-- 默认地址展示,有加入购物车商品时候展示 -->
-    <div
-      class="address"
-      v-show="carnum > 0 ? true : false"
-      @click="$router.push('/address')"
-    >
+    <div class="address" v-show="carnum > 0 ? true : false">
       <van-icon name="location-o" />
       <div class="address-con">
         <div>
@@ -32,6 +28,9 @@
         </div>
         <div class="specific">
           {{ DefaultAddress.addressDetail }}
+        </div>
+        <div class="left" @click="$router.push('/address')">
+          <van-icon name="arrow" />
         </div>
       </div>
     </div>
@@ -58,7 +57,12 @@
             <van-checkbox
               v-model="ischecked[item.id]"
               checked-color="#ee0a24"
-              @click="ischeek({ id: item.id, ischeek: ischecked[item.id] })"
+              @click="
+                ischeek({
+                  id: item.id,
+                  ischeek: ischecked[item.id],
+                })
+              "
             ></van-checkbox>
           </div>
         </template>
@@ -68,7 +72,12 @@
             theme="round"
             button-size="22"
             disable-input
-            @change="changeNumber({ id: item.id, num: inventory[item.id] })"
+            @change="
+              changeNumber({
+                id: item.id,
+                num: inventory[item.id],
+              })
+            "
           />
         </template>
       </van-card>
@@ -88,6 +97,7 @@
       :price="totalpic * 100"
       button-text="提交订单"
       :disabled="buynum > 0 ? false : true"
+      @submit="submitOrder"
     >
       <template #tip> 仅支持微信支付 </template>
       <template #default>
@@ -105,11 +115,13 @@
 
 <script>
 import { Dialog } from "vant";
+import { genOrderId } from "../util/tools";
 import { mapState, mapGetters, mapActions, mapMutations } from "Vuex";
-import { fetchgetcardata, fetchgetAddress } from "../api/user";
+import { fetchgetcardata, fetchgetAddress, fetchorder } from "../api/user";
 export default {
   data() {
     return {
+      id: this.$route.query.id,
       isdisabled: true,
       goods: [],
       flag: true,
@@ -117,6 +129,7 @@ export default {
       DefaultAddress: {},
     };
   },
+  // props: ["id"],
   created() {
     this._fetchgetcardata();
     this._fetchgetAddress();
@@ -136,18 +149,22 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(["updatenum", "updatecheek", "delete", "Allischeek"]),
+    ...mapMutations(["updatenum", "updatecheek", "delete", "Allischeek","clearCartData"]),
     // 获取购物车中的商品
     async _fetchgetcardata() {
       if (this.carnum !== 0) {
         // 获取购物车的商品
         let { message } = await fetchgetcardata(this.getcarid);
         this.goods = message;
-        // 获取用户的默认收货地址,如果没有默认收货地址,则以第一条为默认地址
+        // 获取用户的默认收货地址,如果没有默认收货地址,看路由参数,如果无参数,则以第一条为默认地址,
         let result = await fetchgetAddress(this.userInfo.id);
         // 找默认地址
         let index = result.findIndex((item) => item.isDefault == true);
-        if (index !== -1) {
+        if (this.id) {
+          // 使用用户选择的地址
+          let index = result.findIndex((item) => item.id == this.id);
+          this.DefaultAddress = result[index];
+        } else if (index !== -1) {
           // 找到默认地址
           this.DefaultAddress = result[index];
         } else {
@@ -193,6 +210,35 @@ export default {
     clkAllcheck(data) {
       this.Allischeek(data);
     },
+    // 提交订单
+    async submitOrder() {
+      // 1.准备订单数据
+      let data = {
+        user_id: this.userInfo.id,
+        order_id: genOrderId(),
+        address_id: this.DefaultAddress.id,
+        total_price: this.totalpic,
+        number: this.buynum,
+        goods_ids: this.getCarSelectedGoodsIds,
+      };
+      // 2.提交订单loading提示
+      this.$toast.loading({
+        duration: 0, // 持续展示 toast
+        message: "提交订单中",
+        forbidClick: true,
+        overlay: true,
+      });
+      // 3.发送订单数据,跳转
+      let { status, message } = await fetchorder(data);
+      this.$toast(message);
+      if (status === 0) {
+        // 下单成功要清购物车下单的购物车，并跳转到订单列表
+        this.clearCartData();
+        this.$router.replace("/orderlist");
+      }
+      //4.关闭上面的提示
+      this.$toast.clear();
+    },
   },
   computed: {
     ...mapGetters([
@@ -203,6 +249,7 @@ export default {
       "buynum",
       "totalpic",
       "isAllchecked",
+      "getCarSelectedGoodsIds",
     ]),
     ...mapState(["token", "userInfo"]),
   },
@@ -214,8 +261,6 @@ export default {
   padding-bottom: 800px;
 }
 .shoppingcontent {
-  // background-color: #ffffff;
-  // padding-bottom: 800px;
   height: 100vh;
   .address {
     display: flex;
@@ -232,8 +277,19 @@ export default {
       margin: 0 15px;
     }
     .address-con {
+      position: relative;
       .specific {
         font-size: 14px;
+      }
+      .left {
+        position: absolute;
+        top: -2px;
+        right: -50px;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
     }
   }

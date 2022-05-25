@@ -60,7 +60,7 @@ export default new Vuex.Store({
             }
         },
         // 修改搜索数值
-        upsearchvalue(state,value) {
+        upsearchvalue(state, value) {
             state.searchvalue.value = value
         },
         // 权限校验失败,清除原本的用户信息
@@ -70,9 +70,13 @@ export default new Vuex.Store({
             state.userInfo = {}
         },
         // 更细用户头像的时候
-        updatedav(state,value) {
+        updatedav(state, value) {
             state.userInfo.avatar = value
         },
+        //下单后清楚指定商品的购物车 
+        clearCartData(state) {
+            state.cardata = state.cardata.filter(item => item.check === true)
+        }
     },
     state: {
         token: '',
@@ -91,18 +95,16 @@ export default new Vuex.Store({
         },
         // 获取购物车中的所有id
         getcarid(state) {
-            let id = ''
-            if (state.cardata.length === 1) {
-                state.cardata.forEach(item => { id += item.id })
-                return id
-            } else if (state.cardata.length > 1) {
-                state.cardata.forEach(item => { id += item.id + "," })
-                return id.slice(0, id.length - 1)
-            } else {
-                return ""
-            }
+            return state.cardata.map(item => item.id).join(',')
         },
-
+        // 获取购物车中的选中商品的id
+        getCarSelectedGoodsIds(state) {
+            let ids = [];
+            state.cardata.forEach(item => {
+                item.check && ids.push(item.id)
+            })
+            return ids.join(',')
+        },
         // 监测库存
         inventory(state) {
             let objmap = {}

@@ -37,13 +37,15 @@ const router = new VueRouter({
                     }]
                 },
                 {
-                    path: "shopping",
+                    // path: "shopping/:id",
+                    path: "shopping/",
                     component: () => import('../views/Shopping.vue'),
                     // component: Shopping,
                     meta: {
                         name: "Shopping",
                         ismainpage: true,
-                    }
+                    },
+                     props: true
                 },
                 {
                     path: "user",
@@ -61,13 +63,6 @@ const router = new VueRouter({
             component: () => import('../views/Goodslist.vue'),
             meta: {
                 title: "商品列表"
-            }
-        },
-        {
-            path: "/order",
-            component: () => import('../views/Order.vue'),
-            meta: {
-                title: "我的订单"
             }
         },
         {

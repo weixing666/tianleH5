@@ -5,12 +5,29 @@
         <div class="content">
           <div class="card">
             <div class="goodinfo">
-              <div class="good_img">商品图片</div>
+              <div class="good_img">
+                <img src="http://test.w0824.com/xy2.png" alt="" />
+              </div>
               <div class="good">
-                <div class="title">Shinco/新科 S2300 无线麦克风 无线手持话筒 双手麦 KTV 舞台</div>
+                <div class="title ellipsis_line_2">
+                  KTV 舞台KTV 舞台KTV 舞台KTV 舞台KTV 舞台KTV 舞台KTV 舞台KTV
+                  舞台KTV 舞台KTV 舞台KTV 舞台
+                </div>
+                <div class="pay">微信支付</div>
+                <div class="ordertime">下单时间</div>
+                <div class="money">
+                  <span class="money_"
+                    ><span class="yen">¥</span><span>4880</span></span
+                  >
+                  <span class="total">共5件</span>
+                </div>
               </div>
             </div>
-            <div class="orderinfo">订单详情</div>
+            <div class="orderinfo">
+              <van-button type="danger" size="mini">复制订单号</van-button>
+              <van-button type="danger" size="mini">立即付款</van-button>
+              <van-button type="danger" size="mini">客服</van-button>
+            </div>
           </div>
         </div>
       </van-tab>
@@ -25,31 +42,71 @@
 export default {
   data() {
     return {
-      // active: "",
+      active: "",
     };
   },
 };
 </script>
 
 <style lang="scss" scoped>
+@import url("../assets/css/common.scss");
 .orderlistcoent {
   .content {
     .card {
-      padding: 20px;
-      background-color: rgb(193, 75, 75);
+      padding: 10px;
+      background-color: #fafafa;
       .goodinfo {
-        height: 88px;
         display: flex;
         .good_img {
           width: 88px;
           height: 88px;
+          img {
+            width: 100%;
+            height: 100%;
+          }
         }
-        .good{
-            
+        .good {
+          flex: 1;
+          font-size: 12px;
+          padding-left: 5px;
+          .title {
+            max-height: 32px;
+            font-weight: 500;
+            line-height: 16px;
+            color: #323233;
+          }
+          .pay {
+            max-height: 20px;
+            color: #646566;
+            line-height: 20px;
+          }
+          .ordertime {
+            max-height: 20px;
+            color: #323233;
+            line-height: 20px;
+          }
+          .money {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .money_ {
+              color: #323233;
+              font-size: 16px;
+              .yen {
+                color: #323233;
+                font-size: 12px;
+              }
+            }
+          }
         }
       }
       .orderinfo {
         height: 24px;
+        display: flex;
+        flex-direction: row-reverse;
+        .van-button {
+          margin: 0 3px;
+        }
       }
     }
   }

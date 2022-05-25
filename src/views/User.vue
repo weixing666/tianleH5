@@ -27,6 +27,7 @@
       <van-cell title="收货地址" value="" is-link to="/address" />
       <van-cell title="设置" value="" is-link />
       <van-cell title="关于乐购" value="v1.3.5" is-link />
+      <van-button type="danger" block @click="logout">退出登陆</van-button>
     </van-cell-group>
   </div>
 </template>
@@ -41,7 +42,7 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["updatedav"]),
+    ...mapMutations(["updatedav", "clearUserInfo"]),
     upload() {
       // 触发自点击事件
       this.$refs.avatar.click();
@@ -56,19 +57,34 @@ export default {
         formData.append("file", file);
         let { message, status, src } = await fetchuploadAvatar(formData);
         // 成功失败都提示
-        this.$toast(message)
-        if(status === 0){
+        this.$toast(message);
+        if (status === 0) {
           // 把用户更新的信息存贮到vuex
-            this.updatedav(src)
+          this.updatedav(src);
         }
       }
+    },
+    // 退出登陆
+    logout() {
+      // 清楚用户信息,跳转页面
+      this.$dialog
+        .confirm({
+          message: "确认退出吗",
+        })
+        .then(() => {
+          this.clearUserInfo(this.userInfo.id);
+          this.$router.replace("/login");
+        })
+        .catch(() => {
+          return;
+        });
     },
   },
   computed: {
     ...mapState(["userInfo"]),
     avatar() {
-            return 'http://api.w0824.com/' + this.userInfo.avatar;
-        },
+      return "http://api.w0824.com/" + this.userInfo.avatar;
+    },
   },
 };
 </script>

@@ -1,114 +1,95 @@
 <template>
-  <div>
-    <van-address-edit
-      :area-list="areaList"
-      :address-info="editlist"
-      show-postal
-      show-delete
-      show-set-default
-      show-search-result
-      :search-result="searchResult"
-      :area-columns-placeholder="['请选择', '请选择', '请选择']"
-      @save="onSave"
-      @delete="onDelete"
-      @change-detail="onChangeDetail"
-    />
-  </div>
+    <div>
+        <van-address-edit
+            :area-list="areaList"
+            :address-info="addressInfo"
+            show-delete
+            show-set-default
+            @save="onSave"
+            @delete="onDelete"
+            @change-area="changeArea"
+            @change-default="eidtdefault"
+            :area-columns-placeholder="['请选择', '请选择', '请选择']"
+        />
+    </div>
 </template>
 
 <script>
-import { Dialog } from 'vant';
-import {fetchupdateaddress,fetchdeladdress} from "../api/user"
-import { mapState, mapGetters, mapActions, mapMutations } from "Vuex";
-//areaList,省市信息
+import { Dialog } from "vant";
+import { fetchupdateaddress, fetchdeladdress } from "../api/user";
+import { mapState } from "Vuex";
 import { areaList } from "@vant/area-data";
 export default {
-  data() {
-    return {
-      areaList,
-      searchResult: [],//详细地址搜索结果_fetchgetAddress
-      editlist: {
-        // name:"曾伟兴"
-      }, //默认地址
-    };
-  },
-  props:['value'],
-  computed:{
-    ...mapState(["userInfo"])
-  },
-  
-  created(){
-    // 回显操作
-    let {add_time,addressDetail,areaCode,city,country,id,isDefault,name,postalCode,province,tel,user_id} = JSON.parse(this.value)
-    this.editlist = {
-      id:id, //每条地址的唯一标识
-      name:name,
-      tel:tel,
-      province:province,//省份
-      city:city,//城市
-      county:country ,//区县  
-      addressDetail:addressDetail,//详细地址
-      areaCode:areaCode,//地区编码，通过省市区选择获取（必填）
-      postalCode:postalCode, //邮政编码
-      isDefault:isDefault === 1 ? true : false, //isDefault
-    }
-  },
-
-  methods: {
-    // 保存地址
-    async onSave(content) {
-      let {city,county,isDefault,name,postalCode,province,tel,areaCode ,addressDetail,id} = content
-      let data = {
-        name:name,//李四
-        tel:tel,//13411112222
-        province:province,//省
-        city:city,//市
-        country:county,//区 
-        postalCode:postalCode,//邮编
-        isDefault:isDefault ? 1 : 0,//是否默认地址， 1-是 ， 0-不是,数字类型
-        areaCode:areaCode, //省市区地区码， 120000-120100-120102
-        addressDetail:addressDetail,//地址详情
-        user_id:this.userInfo.id
-      }
-      // 发送请求,更新地址
-      let {status,message} = await fetchupdateaddress(id,data)
-      // 2.提示成功,跳转到我的地址页面并且传递数据
-      if(status === 0){
-        Dialog.alert({
-          message:message,
-        }).then(() => {
-          this.$router.push("/address")
-        });
-      }
+    data() {
+        return {
+            areaList, //areaList,省市信息
+            isDefault: "", // 记录当前是否是默认地址
+            areaCode: "", // 记录当前地址省市区编码
+            fromAddressInfo:JSON.parse(this.value) //传送过来的地址信息
+        };
     },
-    // 删除地址
-    async onDelete({id}) {
-      // 发送地址删除地址
-      let {status} = await fetchdeladdress(id)
-      if(status === 0){
-        Dialog.alert({
-          message:'删除成功',
-        }).then(() => {
-          this.$router.push("/address")
-        });
-      }
+    props: ["value"],
+    computed: {
+        ...mapState(["userInfo"]),
+        addressInfo() { //回显操作
+            let address = JSON.parse(this.value); //整理默认地址
+            address.isDefault = address.isDefault == 1 ? true : false;
+            address.areaCode = address.areaCode.split("-")[2]; //取出最后的区的编码
+            return address;
+        },
     },
-
-    onChangeDetail(val) {
-      // 切换是否使用默认地址时触发
-      // value: 是否选中
-      if (val) {
-        this.searchResult = [
-          {
-            name: "黄龙万科中心",
-            address: "杭州市西湖区",
-          },
-        ];
-      } else {
-        this.searchResult = [];
-      }
+    created() {
+        // 取出原默认地址和编码设置默认值
+        this.areaCode = this.fromAddressInfo.areaCode;
+        this.isDefault = this.fromAddressInfo.isDefault;
     },
-  },
+    methods: {
+        // 保存地址时候触发
+        async onSave(content) {
+            // 1. 获取接口参数
+            let isDefault = this.isDefault ? 1 : 0;
+            let areaCode = this.areaCode;
+            let country = content.county;
+            let data = {
+                ...content,
+                isDefault,
+                areaCode,
+                country,
+            };
+            // 2.发送请求,更新地址
+            console.log(data);
+            let { status, message } = await fetchupdateaddress(content.id,data);
+            // 3.提示成功,跳转到我的地址页面
+            if (status === 0) {
+                Dialog.alert({
+                    message: message,
+                }).then(() => {
+                    this.$router.back();
+                });
+            }
+        },
+        // 切换省市区触发,有修改就会覆盖,否则就会使用提前保存的默认值
+        changeArea(data) {
+            this.areaCode = data.map((item) => item.code).join("-");
+        },
+        // 切换默认地址时候触发
+        eidtdefault(value) {
+            this.isDefault = value;
+        },
+        // 删除地址
+        async onDelete({ id }) {
+            // 发送地址删除地址
+            let { status } = await fetchdeladdress(id);
+            if (status === 0) {
+                Dialog.alert({
+                    message: "删除成功",
+                }).then(() => {
+                    this.$router.push("/address");
+                });
+            }
+        },
+        
+    },
 };
 </script>
 

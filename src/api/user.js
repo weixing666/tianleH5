@@ -44,3 +44,8 @@ export function fetchupdateaddress(id, data) {
 export function fetchuploadAvatar(formData) {
     return instance.post(`api/upload`, formData)
 }
+
+// 发送订单数据
+export function fetchorder(formData) {
+    return instance.post(`api/commitorder`, formData)
+}

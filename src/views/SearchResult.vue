@@ -13,7 +13,7 @@
       <van-dropdown-item v-model="value1" :options="option1" @change="Conditions" />
     </van-dropdown-menu>
     <!-- 空状态 -->
-    <van-empty description="没有该商品" v-show="searchResult.length === 0" />
+    <van-empty description="没有该商品" v-show="searchResult.length === 0 " />
     <!-- 有结果状态 -->
     <div class="goodslist" v-show="searchResult.length">
       <Good

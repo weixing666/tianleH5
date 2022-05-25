@@ -1,5 +1,5 @@
 <template>
- <!-- @search="$router.push(`/searchresult/${searchContent}`)" -->
+  <!-- @search="$router.push(`/searchresult/${searchContent}`)" -->
   <div class="search">
     <van-popup
       v-model="show"
@@ -64,14 +64,19 @@ export default {
   methods: {
     ...mapMutations(["upsearchvalue"]),
     // 取消搜索
-    onCancel() {
+    onCancel(value) {
       this.$router.back();
     },
-    // 
-    foo(a){
-      this.upsearchvalue(a),
-      this.$router.push(`/searchresult/${this.searchContent}`)
-    }
+    //
+    foo(a) {
+      if (!a) {
+        // Toast.fail('失败文案');  
+        this.$toast.fail("请输入搜索商品");
+      } else {
+        this.upsearchvalue(a),
+        this.$router.push(`/searchresult/${this.searchContent}`);
+      }
+    },
   },
 };
 </script>

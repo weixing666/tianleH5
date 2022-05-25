@@ -11,6 +11,7 @@ const instance = axios.create({
 });
 // 添加请求拦截器
 instance.interceptors.request.use(function (config) {
+    config.headers['If-Modified-Since'] = 0;  //告诉浏览器不要缓存
     // 在发送请求之前做些什么
     // 针对token是否过期校验
     if (store.state.token) {
