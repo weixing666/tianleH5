@@ -11,7 +11,7 @@
       </van-nav-bar>
     </van-sticky>
     <!-- 默认地址展示,有加入购物车商品时候展示 -->
-    <div class="address" v-show="carnum > 0 ? true : false">
+    <div class="address" v-show="carnum > 0 && DefaultAddress ? true : false">
       <van-icon name="location-o" />
       <div class="address-con">
         <div>

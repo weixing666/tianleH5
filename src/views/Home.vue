@@ -3,7 +3,7 @@
     <div>
       <!-- 点击进入搜索 -->
       <van-sticky>
-        <van-search placeholder="男士秋裤" @focus="$router.push('/home/index/search')">
+        <van-search placeholder="男士秋裤" @click="$router.push('/home/index/search')">
           <template #left>
             <van-image width="2.5rem" height="2.5rem" src="../src/assets/image/logo.png" />
           </template>

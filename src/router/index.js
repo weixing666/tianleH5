@@ -4,7 +4,7 @@ import 'NProgress/NProgress.css'
 import NProgress from 'NProgress'
 import store from "../store/index.js"
 Vue.use(VueRouter)
-// import Home from '../views/Home.vue'
+import Home from '../views/Home.vue'
 const router = new VueRouter({
     routes: [
         {
@@ -37,7 +37,7 @@ const router = new VueRouter({
                         name: "Shopping",
                         ismainpage: true,
                     },
-                     props: true
+                    props: true
                 },
                 {
                     path: "user",

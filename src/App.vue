@@ -6,10 +6,10 @@
     </van-sticky>
 
     <!-- 搜索结果 -->
-    <keep-alive>
+    <!-- 有增加数据的不需要走缓存, -->
+    <keep-alive include="Goodslist search">
       <router-view></router-view>
     </keep-alive>
-
   </div>
 </template>
 

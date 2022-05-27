@@ -8,7 +8,6 @@
 import { Dialog } from "vant";
 import { fetchaddAddress } from "../api/user";
 import { mapState } from "Vuex";
-//areaList,省市信息
 import { areaList } from "@vant/area-data";
 export default {
   data() {

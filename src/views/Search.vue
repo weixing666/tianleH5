@@ -1,11 +1,11 @@
 <template>
   <div class="search">
-    <van-popup v-model="show" position="top" :style="{ height: '60%' }" @click-overlay="$router.back()">
+    <van-popup v-model="show"  position="top" :style="{ height: '60%' }" @click-overlay="$router.back()" duration="0">
       <form action="/">
-        <van-search v-model="searchContent" show-action placeholder="请输入搜索关键词" @search="search(searchContent)" @cancel="onCancel" />
+        <van-search ref="kuang" :autofocus="true" v-model.trim="searchContent" show-action placeholder="请输入搜索关键词" @search="search(searchContent)" @cancel="onCancel" />
       </form>
       <div class="searchWrap">
-        <div class="searc_content">
+        <div class="searc_content" v-if="historyData.length !== 0">
           <div class="cart">
             <h3 class="conten">搜索历史</h3>
             <van-icon name="delete-o" @click="delect" />
@@ -46,12 +46,14 @@ export default {
       hotSearch: ["苹果14", "华为P60", "小米mate", "小新17"],
       // 关闭隐藏
       flag: true,
-    };
+    }
   },
   created() {
     this._search;
   },
-
+  mounted() {
+    this.$refs.kuang.querySelector("input").focus()
+  },
   methods: {
     ...mapMutations(["upsearchvalue"]),
     // 取消搜索

@@ -1,10 +1,10 @@
 <template>
   <div class="searchresult">
     <form action="/">
-      <van-search v-model="sevalue.value" show-action placeholder="请输入搜索关键词" @search="onSearch" @cancel="onCancel" :title="title"/>
+      <van-search :autofocus="true" v-model.trim="sevalue.value" show-action placeholder="请输入搜索关键词" @search="onSearch" @cancel="onCancel" :title="title" />
     </form>
     <van-dropdown-menu>
-      <van-dropdown-item v-model="value1" :options="option1" @change="Conditions" v-if="searchResult.length !== 0"/>
+      <van-dropdown-item v-model="value1" :options="option" @change="Conditions" v-if="searchResult.length !== 0" />
     </van-dropdown-menu>
     <!-- 空状态 -->
     <van-empty description="没有该商品" v-show="searchResult.length === 0 " />
@@ -25,16 +25,19 @@ export default {
       // 搜索关键字
       valu: "",
       // 选中关键字
-      value1:"商品排序",
-        title:"商品排序",
-      option1: [
+      value1:"buy",
+      title: "商品排序",
+      option: [
         { text: "销量", value: "buy" },
         { text: "好评", value: "likes" },
         { text: "价格", value: "sell_price" },
       ],
       searchResult: [],
+      //历史搜索
+      history:JSON.parse(localStorage.getItem("historyData")),
     };
   },
+
   components: {
     Good,
   },
@@ -49,23 +52,21 @@ export default {
   },
   computed: {
     ...mapGetters(["sevalue"]),
-    history() {
-      localStorage.getItem(historyData)
-    }
   },
   methods: {
     ...mapMutations(["upsearchvalue"]),
     // 搜索的数据
     async _search(value, sort = "buy", page = 1, limit = 30, order = "desc") {
-      this.searchResult = await fetchsearch(value,sort,page,limit,order);
+      this.searchResult = await fetchsearch(value, sort, page, limit, order);
     },
     // 确认搜索
     onSearch(value) {
       this.upsearchvalue(this.sevalue.value);
       this._search(this.sevalue.value);
+      
       //保存搜索历史记录
-      this.historyData.push(this.sevalue.value)
-      localStorage.setItem("historyData", this.historyData)
+      this.history.push(this.sevalue.value)
+      localStorage.setItem("historyData",  JSON.stringify(this.history))
     },
     // 取消搜索
     onCancel() {
