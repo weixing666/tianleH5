@@ -5,11 +5,6 @@ import NProgress from 'NProgress'
 import store from "../store/index.js"
 Vue.use(VueRouter)
 // import Home from '../views/Home.vue'
-// import Shopping from '../views/Shopping.vue'
-// import User from '../views/User.vue'
-// import Index from '../views/Index.vue'
-// import Goodslist from '../views/Goodslist.vue'
-// import Order from '../views/Order.vue'
 const router = new VueRouter({
     routes: [
         {
@@ -23,7 +18,6 @@ const router = new VueRouter({
                 {
                     path: "index",
                     component: () => import('../views/Home.vue'),
-                    // component: Home,
                     meta: {
                         name: "Home",
                         ismainpage: true,
@@ -37,10 +31,8 @@ const router = new VueRouter({
                     }]
                 },
                 {
-                    // path: "shopping/:id",
                     path: "shopping/",
                     component: () => import('../views/Shopping.vue'),
-                    // component: Shopping,
                     meta: {
                         name: "Shopping",
                         ismainpage: true,
@@ -138,6 +130,8 @@ const router = new VueRouter({
         },
     ]
 })
+
+//关闭右侧图标圈圈
 NProgress.configure({
     showSpinner: false
 })
@@ -160,4 +154,7 @@ router.beforeEach((to, from, next) => {
 router.afterEach((to, from) => {
     NProgress.done()
 })
+
+
+
 export default router

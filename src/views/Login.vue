@@ -13,7 +13,7 @@
 
 <script>
 import { fetchlogin } from "../api/user";
-import { mapState, mapGetters, mapActions, mapMutations } from "Vuex";
+import {  mapMutations } from "Vuex";
 export default {
   data() {
     return {

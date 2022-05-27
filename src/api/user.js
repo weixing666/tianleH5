@@ -60,8 +60,7 @@ export function fetchgetorder(user_id) {
     return instance.post(`api/userorder/${user_id}`)
 }
 
-// 模拟提交订单信息
+// 模拟订单支付
 export function fetchPayOrder(order_id) {
-    return axios.post('api/payorder/' + order_id)
+    return instance.post(`api/payorder/${order_id}`)
 }
-

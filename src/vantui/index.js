@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { Tab, Tabs, Empty, Checkbox, CheckboxGroup, Stepper, SwipeCell, Card, ImagePreview, Uploader, Cell, CellGroup, AddressEdit, AddressList, Sku, GoodsAction, GoodsActionButton, GoodsActionIcon, List, PullRefresh, DropdownMenu, DropdownItem, Form, Field, Button, Tabbar, TabbarItem, NavBar, Icon, Search, Image as VanImage, Popup, Swipe, SwipeItem, Lazyload, Grid, GridItem, Sticky, Divider, SubmitBar } from 'vant';
+import { Steps, Step, Tab, Tabs, Empty, Checkbox, CheckboxGroup, Stepper, SwipeCell, Card, ImagePreview, Uploader, Cell, CellGroup, AddressEdit, AddressList, Sku, GoodsAction, GoodsActionButton, GoodsActionIcon, List, PullRefresh, DropdownMenu, DropdownItem, Form, Field, Button, Tabbar, TabbarItem, NavBar, Icon, Search, Image as VanImage, Popup, Swipe, SwipeItem, Lazyload, Grid, GridItem, Sticky, Divider, SubmitBar } from 'vant';
 import 'vant/lib/index.css';
 Vue.use(Button);
 Vue.use(Tabbar);
@@ -41,3 +41,5 @@ Vue.use(CheckboxGroup);
 Vue.use(Empty);
 Vue.use(Tab);
 Vue.use(Tabs);
+Vue.use(Step);
+Vue.use(Steps);

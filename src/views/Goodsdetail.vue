@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions, mapMutations } from "Vuex";
+import { mapGetters, mapMutations } from "Vuex";
 import { fetchgoodsdetail, fetchgoodsinfo } from "../api/goodsdetail";
 import { ImagePreview } from "vant";
 export default {

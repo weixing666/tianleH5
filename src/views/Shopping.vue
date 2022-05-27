@@ -77,7 +77,7 @@
 <script>
 import { Dialog } from "vant";
 import { genOrderId } from "../util/tools";
-import { mapState, mapGetters, mapActions, mapMutations } from "Vuex";
+import { mapState, mapGetters, mapMutations } from "Vuex";
 import { fetchgetcardata, fetchgetAddress, fetchorder } from "../api/user";
 export default {
   data() {
@@ -90,7 +90,6 @@ export default {
       DefaultAddress: {},
     };
   },
-  // props: ["id"],
   created() {
     this._fetchgetcardata();
     this._fetchgetAddress();

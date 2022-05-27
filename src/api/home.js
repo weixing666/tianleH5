@@ -12,5 +12,6 @@ export function fetchgoodslist(page = 1, limit = 10) {
 
 // 搜索结果
 export function fetchsearch(value, sort = "buy", page = 1, limit = 10, order = "desc") {
+    console.log(sort);
     return instance.get(`api/search?value=${value}&sort=${sort}&page=${page}&pagesize=${limit}&order=${order}`)
 }

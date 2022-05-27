@@ -1,7 +1,9 @@
 <template>
   <!-- 三个tab的父组件 -->
   <div>
-    <router-view></router-view>
+    <keep-alive>
+       <router-view></router-view>    
+    </keep-alive>
     <van-tabbar v-model="active" active-color="red">
       <van-tabbar-item icon="home-o" to="/home/index">首页</van-tabbar-item>
       <van-tabbar-item icon="shopping-cart-o" :badge="carnum" to="/home/shopping">购物车</van-tabbar-item>
@@ -11,7 +13,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions, mapMutations } from "Vuex";
+import { mapGetters } from "Vuex";
 export default {
   data() {
     return {

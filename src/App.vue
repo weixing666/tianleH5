@@ -6,7 +6,10 @@
     </van-sticky>
 
     <!-- 搜索结果 -->
-    <router-view></router-view>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
+
   </div>
 </template>
 

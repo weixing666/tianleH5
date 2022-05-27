@@ -24,7 +24,7 @@ export default {
   data() {
     return {
       page: 0,
-      pagesize: 8,
+      pagesize:20,
       list: [],
       loading: false, //是否正在加载中
       finished: false, //是否已经加载完毕

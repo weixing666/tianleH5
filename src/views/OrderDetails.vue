@@ -42,9 +42,31 @@
         <span>{{ orderinfo.order_id }}<span class="copy">复制</span></span>
       </div>
     </div>
-
+    <!-- 物流弹窗 active 当前步骤 direction-显示方向 -->
+    <van-popup v-model="show" position="bottom" :style="{ height: '80%' }">
+      <van-steps direction="vertical" :active="0">
+        <van-step>
+          <h3>【佛山市】已离开 广东佛山分拨交付中心；发往 广东广州南沙公司</h3>
+          <p>2021.12.07 16:11 星期二</p>
+        </van-step>
+        <van-step>
+          <h3>【佛山市】已到达 广东佛山分拨交付中心</h3>
+          <p>2021.12.07 16:07</p>
+        </van-step>
+        <van-step>
+          <h3>【南宁市】已离开 广西南宁分拨交付中心；发往 广东佛山分拨交付中心</h3>
+          <p>2021.12.07 02:05</p>
+        </van-step>
+        <van-step>
+          <h3>快件已发货</h3>
+          <p>2021-12-06 09:30</p>
+        </van-step>
+      </van-steps>
+    </van-popup>
     <div class="btns">
-      <van-button type="primary" size="mini" v-if="orderinfo.status == 0" @click="pay">立即付款</van-button>
+      <van-button type="danger" size="mini" v-if="orderinfo.status == 0" @click="pay">立即付款</van-button>
+      <van-button type="info" size="mini" v-if="orderinfo.status == 2">已完成</van-button>
+      <van-button type="primary" size="mini" v-if="orderinfo.is_out == 1" @click="logistics">查看物流</van-button>
     </div>
   </div>
 </template>
@@ -56,6 +78,7 @@ export default {
   props: ["order_id"], //对应的订单ID
   data() {
     return {
+      show: false,
       statusImg: car2Png,
       orderinfo: {}, //订单信息
       orderGoods: [], //商品信息
@@ -73,23 +96,33 @@ export default {
     },
     pay() {
       this.$dialog.confirm({
-        message: "确认付款吗",
+        title: '付款',
+        message: '确认支付吗',
       })
         .then(async () => {
-          let result = await fetchPayOrder(this.order_id);
+          let { order_id } = this.orderinfo;
+          try {
+            await fetchPayOrder(order_id);
+          } catch (err) {
+            //支付异常
+            this.$toast("支付异常,请稍后再试")
+          }
           this.$toast.success({
-            message:"支付成功",
-            icon: "wechat-pay",
+            message: "支付成功",
+            icon: "wechat-pay"
           })
-          this.orderInfo.is_take = 1;
-          this.orderInfo.is_out = 1;
-          this.orderInfo.status = 2;
+          this.orderinfo.is_take = 1;
+          this.orderinfo.is_out = 1;
+          this.orderinfo.status = 2;
         })
         .catch(() => {
-            console.log(66);
           this.$toast("已取消支付")
         });
     },
+    // 物流
+    logistics() {
+      this.show = true
+    }
   },
 };
 </script>
@@ -151,6 +184,9 @@ export default {
     position: fixed;
     bottom: 0;
     box-shadow: 0 0 10px #ccc;
+    .van-button {
+      margin: 0 3px;
+    }
   }
 }
 </style>>
