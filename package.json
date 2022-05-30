@@ -18,6 +18,8 @@
     "moment": "^2.29.3",
     "nprogress": "^0.2.0",
     "qs": "^6.10.3",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-external-globals": "^0.6.1",
     "sass": "^1.51.0",
     "vant": "^2.12.47",
     "vite-plugin-vue2": "^2.0.0",
