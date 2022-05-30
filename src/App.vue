@@ -19,9 +19,24 @@ export default {
     return {
       ismainpage: true,
       title: "天乐",
+      isOnLine: navigator.onLine, //是否有网络 值为布尔值
     };
   },
+  methods: {
+    updateNetworkStatu(e) {
+      console.log(e);
+      this.isOnLine = e.type === "online" ? true : false
+    }
+  },
+  mounted() {
+    window.addEventListener("online", this.updateNetworkStatu); //有网络的时候被触发
+    window.addEventListener("offline", this.updateNetworkStatu);//无网络的时候被触发
+  },
   watch: {
+    isOnLine() {
+      this.isOnLine === false && this.$toast.fail('网络异常,请检查网络')
+      this.isOnLine === true && this.$toast.success('网络已链接')
+    },
     $route: {
       handler: function (newroute) {
         let { ismainpage, title } = newroute.meta;

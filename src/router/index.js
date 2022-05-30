@@ -128,6 +128,13 @@ const router = new VueRouter({
             },
             props: true
         },
+        {
+            path: "/test",
+            component: () => import('../views/test.vue'),
+            meta: {
+                title: "测试"
+            },
+        },
     ]
 })
 
