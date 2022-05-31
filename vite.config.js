@@ -1,4 +1,4 @@
-import { createVuePlugin} from 'vite-plugin-vue2'
+import { createVuePlugin } from 'vite-plugin-vue2'
 import { defineConfig } from 'vite'
 import commonjs from "rollup-plugin-commonjs";
 import externalGlobals from "rollup-plugin-external-globals";
@@ -36,20 +36,45 @@ export default defineConfig({
                 drop_debugger: true,
             }
         },
+        rollupOptions: {
+            // 把js css vue 文件打包后分开文件夹装
+            // output: {
+            //     chunkFileNames: 'static/js/[name]-[hash].js',
+            //     entryFileNames: 'static/js/[name]-[hash].js',
+            //     assetFileNames: 'static/[ext]/[name]-[hash].[ext]',
+            // }
+            output: {
+                assetFileNames: 'assets/[ext]/[name]-[hash].[ext]',
+                // chunkFileNames: 'assets/js/[name]-[hash].js',
+                entryFileNames: 'assets/js/[name]-[hash].js',
+                chunkFileNames: (chunkInfo) => {
+                    const facadeModuleId = chunkInfo.facadeModuleId ? chunkInfo.facadeModuleId.split('/') : [];
+                    const fileName = facadeModuleId[facadeModuleId.length - 2] || '[name]';
+                    return `js/${fileName}/[name].[hash].js`;
+                },
+                // 超大静态资源拆分
+                manualChunks(id) {
+                    if (id.includes('node_modules')) {
+                        return id.toString().split('node_modules/')[1].split('/')[0].toString();
+                    }
+                }
+            }
+        }
         // 小于此阈值的导入或引用资源将内联为 base64 编码， 以避免额外的 http 请求。 设置为 0 可以完全禁用此项。 默认4096 (4kb)
         // 阈值不要设置太大，太大解码很耗性能
-        assetsInlineLimit: 4096 * 2, // 8kb
-        // 配置cdn加速
-        rollupOptions: {
-            external: ["axios", "moment"],
-            plugins: [
-                commonjs(),
-                externalGlobals({
-                    axios: "axios",
-                    moment: "moment",
-                }),
-            ],
-        },
-    }
+    },
+    assetsInlineLimit: 4096 * 2, // 8kb
+    // 配置cdn加速
+    rollupOptions: {
+        external: ["axios", "moment"],
+        plugins: [
+            commonjs(),
+            externalGlobals({
+                axios: "axios",
+                moment: "moment",
+            }),
+        ],
+
+    },
 
 })

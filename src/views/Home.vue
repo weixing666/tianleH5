@@ -5,7 +5,7 @@
       <van-sticky>
         <van-search placeholder="男士秋裤" @click="$router.push('/home/index/search')">
           <template #left>
-            <van-image width="2.5rem" height="2.5rem" src="../src/assets/image/logo.png" />
+            <van-image width="2.5rem" height="2.5rem" :src="logo" />
           </template>
         </van-search>
       </van-sticky>
@@ -35,6 +35,15 @@
 </template>
 
 <script>
+import logo from "../assets/image/logo.png"
+import img1 from "../assets/image/1.png"
+import img2 from "../assets/image/2.png"
+import img3 from "../assets/image/3.png"
+import img4 from "../assets/image/4.png"
+import img5 from "../assets/image/5.png"
+import img6 from "../assets/image/6.png"
+import img7 from "../assets/image/7.png"
+import img8 from "../assets/image/8.png"
 import { fetchgoodslist, fetchslideshow } from "../api/home";
 import BackTop from "../components/BackTop.vue";
 import Good from "../components/Good.vue";
@@ -46,34 +55,47 @@ export default {
       // 方格
       image: [
         {
-          img: "../src/assets/image/1.png",
+          img: img1,
           title: "天乐超市",
           to: "/goodslist",
         },
         {
-          img: "../src/assets/image/2.png",
+          img: img2,
           title: "新闻列表",
           to: "/goodslist",
         },
         {
-          img: "../src/assets/image/3.png",
+          img: img3,
           title: "天乐生鲜",
           to: "/goodslist",
         },
         {
-          img: "../src/assets/image/4.png",
+          img: img4,
           title: "生活缴费",
           to: "/goodslist",
         },
-        { img: "../src/assets/image/5.png", title: "领精贴", to: "/goodslist" },
         {
-          img: "../src/assets/image/6.png",
+          img: img5,
+          title: "领精贴",
+          to: "/goodslist"
+        },
+        {
+          img: img6,
           title: "plus会员",
           to: "/goodslist",
         },
-        { img: "../src/assets/image/7.png", title: "领乐豆", to: "/goodslist" },
-        { img: "../src/assets/image/8.png", title: "更多", to: "/goodslist" },
+        {
+          img: img7,
+          title: "领乐豆",
+          to: "/goodslist"
+        },
+        {
+          img: img8,
+          title: "更多",
+          to: "/goodslist"
+        },
       ],
+      logo,
       // 商品列表
       goodslist: [],
     };

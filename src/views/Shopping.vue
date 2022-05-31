@@ -29,7 +29,7 @@
     <!-- 空购物车 -->
     <div class="buycar" v-show="carnum > 0 ? false : true">
       <div class="imgcar">
-        <van-image width="100" height="100" src="../src/assets/image/car.png" />
+        <van-image width="100" height="100" :src="carimg" />
       </div>
       <div class="tip">您的购物车空空如也</div>
       <div class="ending">
@@ -75,6 +75,7 @@
 </template>
 
 <script>
+import carimg from "../assets/image/car.png"
 import { Dialog } from "vant";
 import { genOrderId } from "../util/tools";
 import { mapState, mapGetters, mapMutations } from "Vuex";
@@ -86,6 +87,7 @@ export default {
       isdisabled: true,
       goods: [],
       flag: true,
+      carimg,
       // 默认地址
       DefaultAddress: {},
     };
